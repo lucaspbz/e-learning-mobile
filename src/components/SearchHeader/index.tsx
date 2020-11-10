@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import {
   Container,
   SearchContainerInput,
@@ -14,13 +15,18 @@ import {
 import logoImg from '../../assets/e.learning.png';
 import signOutImg from '../../assets/signOut.png';
 
-const Header: React.FC = () => {
+const SearchHeader: React.FC = () => {
+  const { navigate } = useNavigation();
   return (
     <Container>
       <LogoContainer>
         <Logo source={logoImg} />
 
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigate('Login');
+          }}
+        >
           <LogoutButton source={signOutImg} width={24} height={24} />
         </TouchableOpacity>
       </LogoContainer>
@@ -33,4 +39,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default SearchHeader;

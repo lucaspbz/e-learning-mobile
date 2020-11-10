@@ -5,6 +5,8 @@ import { AntDesign } from '@expo/vector-icons';
 export const Container = styled.View`
   padding-top: ${Constants.statusBarHeight}px;
   padding-bottom: 103px;
+  background-color: #6548a3;
+  margin-bottom: -72px;
 `;
 
 export const LogoContainer = styled.View`

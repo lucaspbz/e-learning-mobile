@@ -7,6 +7,7 @@ export const Container = styled.TouchableOpacity`
   border-radius: 16px;
   margin: 0 auto 18px 0;
   padding: 24px;
+  position: relative;
 `;
 
 export const ItemImg = styled.Image`
@@ -26,4 +27,10 @@ export const ItemDescription = styled.Text`
   font-size: 10px;
   line-height: 12px;
   color: #c4c4d1;
+`;
+
+export const DeleteIcon = styled.TouchableOpacity`
+  position: absolute;
+  top: 10px;
+  right: 10px;
 `;

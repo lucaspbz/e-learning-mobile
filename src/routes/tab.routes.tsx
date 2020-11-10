@@ -11,7 +11,7 @@ const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ color, size }) => {
           const iconName = route.name === 'Home' ? 'home' : 'heart';
 
           return <Feather name={iconName} size={size} color={color} />;
