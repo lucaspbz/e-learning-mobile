@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { AppLoading } from 'expo';
 import Routes from './src/routes';
+import AppProvider from './src/hooks';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -16,7 +17,9 @@ const App: React.FC = () => {
   }
   return (
     <NavigationContainer>
-      <Routes />
+      <AppProvider>
+        <Routes />
+      </AppProvider>
       <StatusBar style="light" />
     </NavigationContainer>
   );

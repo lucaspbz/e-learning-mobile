@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import { Feather } from '@expo/vector-icons';
-
 import { useNavigation } from '@react-navigation/native';
+
+import { useClass } from '../../hooks/class';
+
 import {
   Container,
   ItemDescription,
@@ -32,10 +34,14 @@ interface ICourseItemProps {
 }
 
 const CourseItem: React.FC<ICourseItemProps> = ({ course, isDeletable }) => {
+  const { setSelectedCourse } = useClass();
+
   const navigation = useNavigation();
   const handleNavigateToCourse = useCallback(() => {
+    setSelectedCourse(course);
     navigation.navigate('Lessons');
-  }, [navigation]);
+  }, [course, navigation, setSelectedCourse]);
+
   return (
     <Container onPress={handleNavigateToCourse}>
       {isDeletable && (
