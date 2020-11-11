@@ -75,6 +75,20 @@ const LessonDetail: React.FC = () => {
     return lessonIndex < course.lessons.length - 1;
   }, [course.lessons.length, lessonIndex]);
 
+  const handleNavigateToPreviousLesson = useCallback(() => {
+    if (canNavigateToPreviousLesson) {
+      setLessonIndex(previousValue => previousValue - 1);
+      setLoading(true);
+    }
+  }, [canNavigateToPreviousLesson]);
+
+  const handleNavigateToNextLesson = useCallback(() => {
+    if (canNavigateToNextLesson) {
+      setLoading(true);
+      setLessonIndex(previousValue => previousValue + 1);
+    }
+  }, [canNavigateToNextLesson]);
+
   return (
     <Container>
       <LessonsHeader />
@@ -118,23 +132,31 @@ const LessonDetail: React.FC = () => {
 
       <Footer>
         <PreviousLessonButton
-          onPress={() => {
-            canNavigateToPreviousLesson &&
-              setLessonIndex(previousValue => previousValue - 1);
-          }}
+          active={canNavigateToPreviousLesson}
+          onPress={handleNavigateToPreviousLesson}
         >
-          <Feather name="arrow-left" size={24} color="#FF6680" />
-          <PreviousLessonButtonText>Aula anterior</PreviousLessonButtonText>
+          <Feather
+            name="arrow-left"
+            size={24}
+            color={canNavigateToPreviousLesson ? '#fff' : '#FF6680'}
+          />
+          <PreviousLessonButtonText active={canNavigateToPreviousLesson}>
+            Aula anterior
+          </PreviousLessonButtonText>
         </PreviousLessonButton>
 
         <NextLessonButton
-          onPress={() => {
-            canNavigateToNextLesson &&
-              setLessonIndex(previousValue => previousValue + 1);
-          }}
+          active={canNavigateToNextLesson}
+          onPress={handleNavigateToNextLesson}
         >
-          <NextLessonButtonText>Próxima aula</NextLessonButtonText>
-          <Feather name="arrow-right" size={24} color="#fff" />
+          <NextLessonButtonText active={canNavigateToNextLesson}>
+            Próxima aula
+          </NextLessonButtonText>
+          <Feather
+            name="arrow-right"
+            size={24}
+            color={canNavigateToNextLesson ? '#fff' : '#FF6680'}
+          />
         </NextLessonButton>
       </Footer>
     </Container>
