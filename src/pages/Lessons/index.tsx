@@ -30,7 +30,7 @@ import { useClass } from '../../hooks/class';
 import secondsToMinutes from '../../util/secondsToMinutes';
 
 const Lessons: React.FC = () => {
-  const { course } = useClass();
+  const { selectedCourse: course } = useClass();
   const { navigate } = useNavigation();
 
   const handleNavigateToLessonDetail = useCallback(

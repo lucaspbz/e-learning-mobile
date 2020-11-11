@@ -34,7 +34,7 @@ const LessonDetail: React.FC = () => {
   const [videoHeight, setVideoHeight] = useState(300);
 
   const { params } = useRoute();
-  const { course } = useClass();
+  const { selectedCourse: course } = useClass();
 
   const { lessonId } = params as IParams;
 

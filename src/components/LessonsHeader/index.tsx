@@ -6,9 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import logoImg from '../../assets/e.learning.png';
 
 import { Container, Logo } from './styles';
+import { useClass } from '../../hooks/class';
 
 const LessonsHeader: React.FC = () => {
   const { goBack } = useNavigation();
+  const { selectedCourse, setFavourite } = useClass();
+
   return (
     <Container>
       <TouchableOpacity onPress={goBack}>
@@ -17,7 +20,11 @@ const LessonsHeader: React.FC = () => {
 
       <Logo source={logoImg} />
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          setFavourite(selectedCourse.id);
+        }}
+      >
         <Feather name="heart" size={24} color="#FF6680" />
       </TouchableOpacity>
     </Container>
