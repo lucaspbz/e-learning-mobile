@@ -25,31 +25,30 @@ import { useClass } from '../../hooks/class';
 import secondsToMinutes from '../../util/secondsToMinutes';
 
 interface IParams {
-  lessonId: string;
+  lessonNumber: number;
 }
 
 const LessonDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [videoHeight, setVideoHeight] = useState(300);
+  const [lessonIndex, setLessonIndex] = useState(0);
 
   const { params } = useRoute();
   const { selectedCourse: course } = useClass();
 
-  const { lessonId } = params as IParams;
+  useEffect(() => {
+    const { lessonNumber } = params as IParams;
+    setLessonIndex(lessonNumber);
+  }, [params]);
 
   const selectedLesson = useMemo(() => {
-    const lessonIndex = course.lessons.findIndex(
-      lesson => lesson.id === lessonId,
-    );
-
     return {
       ...course.lessons[lessonIndex],
-      index: lessonIndex,
       duration: secondsToMinutes(course.lessons[lessonIndex].duration),
       position: lessonIndex < 9 ? `0${lessonIndex + 1}` : lessonIndex + 1,
     };
-  }, [course.lessons, lessonId]);
+  }, [course.lessons, lessonIndex]);
 
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
@@ -63,6 +62,14 @@ const LessonDetail: React.FC = () => {
       setVideoHeight(meta.height);
     });
   }, [selectedLesson.video_id]);
+
+  const canNavigateToPreviousLesson = useMemo(() => {
+    return lessonIndex > 0;
+  }, [lessonIndex]);
+
+  const canNavigateToNextLesson = useMemo(() => {
+    return lessonIndex < course.lessons.length - 1;
+  }, [course.lessons.length, lessonIndex]);
 
   return (
     <Container>
@@ -106,12 +113,22 @@ const LessonDetail: React.FC = () => {
       </Content>
 
       <Footer>
-        <PreviousLessonButton>
+        <PreviousLessonButton
+          onPress={() => {
+            canNavigateToPreviousLesson &&
+              setLessonIndex(previousValue => previousValue - 1);
+          }}
+        >
           <Feather name="arrow-left" size={24} color="#FF6680" />
           <PreviousLessonButtonText>Aula anterior</PreviousLessonButtonText>
         </PreviousLessonButton>
 
-        <NextLessonButton>
+        <NextLessonButton
+          onPress={() => {
+            canNavigateToNextLesson &&
+              setLessonIndex(previousValue => previousValue + 1);
+          }}
+        >
           <NextLessonButtonText>Próxima aula</NextLessonButtonText>
           <Feather name="arrow-right" size={24} color="#fff" />
         </NextLessonButton>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +11,11 @@ import { useClass } from '../../hooks/class';
 
 const LessonsHeader: React.FC = () => {
   const { goBack } = useNavigation();
-  const { selectedCourse, setFavourite } = useClass();
+  const { selectedCourse, setFavourite, isFavourite } = useClass();
+
+  const heartIcon = useMemo(() => {
+    return isFavourite(selectedCourse.id) ? 'heart' : 'hearto';
+  }, [isFavourite, selectedCourse.id]);
 
   return (
     <Container>
@@ -25,7 +30,7 @@ const LessonsHeader: React.FC = () => {
           setFavourite(selectedCourse.id);
         }}
       >
-        <Feather name="heart" size={24} color="#FF6680" />
+        <AntDesign name={heartIcon} size={24} color="#FF6680" />
       </TouchableOpacity>
     </Container>
   );

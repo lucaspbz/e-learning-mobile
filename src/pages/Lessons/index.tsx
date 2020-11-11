@@ -34,8 +34,8 @@ const Lessons: React.FC = () => {
   const { navigate } = useNavigation();
 
   const handleNavigateToLessonDetail = useCallback(
-    (lessonId: string) => {
-      navigate('LessonDetail', { lessonId });
+    (lessonNumber: number) => {
+      navigate('LessonDetail', { lessonNumber });
     },
     [navigate],
   );
@@ -60,7 +60,7 @@ const Lessons: React.FC = () => {
           <PlayIcon
             completed={lesson.completed || false}
             onPress={() => {
-              handleNavigateToLessonDetail(lesson.id);
+              handleNavigateToLessonDetail(item.index);
             }}
           >
             <Image source={playIcon} />
