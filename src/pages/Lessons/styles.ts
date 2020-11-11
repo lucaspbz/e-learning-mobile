@@ -52,7 +52,7 @@ export const LessonContainer = styled.View`
 
 export const LessonName = styled.Text`
   margin: 16px auto 16px 0;
-  max-width: 136px;
+  max-width: 186px;
   font-family: 'Rubik_400Regular';
   font-size: 15px;
   line-height: 20px;
