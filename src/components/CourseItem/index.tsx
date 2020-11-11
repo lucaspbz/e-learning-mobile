@@ -26,6 +26,7 @@ export interface ILesson {
   description: string;
   video_id: string;
   completed?: boolean;
+  position?: string;
 }
 
 interface ICourseItemProps {

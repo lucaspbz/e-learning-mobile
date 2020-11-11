@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
+import { Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import YoutubePlayer, { getYoutubeMeta } from 'react-native-youtube-iframe';
 
@@ -20,10 +21,35 @@ import {
   PreviousLessonButton,
   PreviousLessonButtonText,
 } from './styles';
+import { useClass } from '../../hooks/class';
+import secondsToMinutes from '../../util/secondsToMinutes';
+
+interface IParams {
+  lessonId: string;
+}
 
 const LessonDetail: React.FC = () => {
+  const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [videoHeight, setVideoHeight] = useState(300);
+
+  const { params } = useRoute();
+  const { course } = useClass();
+
+  const { lessonId } = params as IParams;
+
+  const selectedLesson = useMemo(() => {
+    const lessonIndex = course.lessons.findIndex(
+      lesson => lesson.id === lessonId,
+    );
+
+    return {
+      ...course.lessons[lessonIndex],
+      index: lessonIndex,
+      duration: secondsToMinutes(course.lessons[lessonIndex].duration),
+      position: lessonIndex < 9 ? `0${lessonIndex + 1}` : lessonIndex + 1,
+    };
+  }, [course.lessons, lessonId]);
 
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
@@ -32,47 +58,51 @@ const LessonDetail: React.FC = () => {
     }
   }, []);
 
-  const togglePlaying = useCallback(() => {
-    setPlaying(prev => !prev);
-  }, []);
-
   useEffect(() => {
-    getYoutubeMeta('iee2TATGMyI').then(meta => {
+    getYoutubeMeta(selectedLesson.video_id).then(meta => {
       setVideoHeight(meta.height);
     });
-  }, []);
+  }, [selectedLesson.video_id]);
+
   return (
     <Container>
       <LessonsHeader />
 
       <VideoContainer style={{ height: videoHeight }}>
         <YoutubePlayer
+          onReady={() => {
+            setLoading(false);
+          }}
           initialPlayerParams={{ controls: true }}
           height={videoHeight}
           play={playing}
-          videoId="iee2TATGMyI"
+          videoId={selectedLesson.video_id}
           onChangeState={onStateChange}
         />
+        {loading && (
+          <ActivityIndicator
+            color="#6548a3"
+            size="large"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '50%',
+              zIndex: -1,
+            }}
+          />
+        )}
       </VideoContainer>
 
       <Content>
-        <LessonName>Introdução à teoria da Matemática</LessonName>
+        <LessonName>{selectedLesson.name}</LessonName>
 
         <DetailsContainer>
-          <LessonNumber>Aula 01</LessonNumber>
+          <LessonNumber>Aula {selectedLesson.position}</LessonNumber>
           <Feather name="clock" size={12} color="#C4C4D1" />
-          <LessonDuration>5min</LessonDuration>
+          <LessonDuration>{selectedLesson.duration} min</LessonDuration>
         </DetailsContainer>
 
-        <LessonDescription>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
-          distinctio eius quo nihil excepturi asperiores obcaecati dolorem
-          necessitatibus doloremque? Facere quis, reiciendis necessitatibus
-          maiores ipsa vitae eos? Eveniet, aut qui. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Incidunt cumque sapiente nesciunt.
-          Facilis consequuntur, pariatur ipsum alias reiciendis fugit incidunt,
-          ut quasi id eaque veritatis aliquam autem dolore. Vitae, natus.
-        </LessonDescription>
+        <LessonDescription>{selectedLesson.description}</LessonDescription>
       </Content>
 
       <Footer>
