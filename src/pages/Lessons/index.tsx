@@ -30,7 +30,7 @@ import { useClass } from '../../hooks/class';
 import secondsToMinutes from '../../util/secondsToMinutes';
 
 const Lessons: React.FC = () => {
-  const { selectedCourse: course } = useClass();
+  const { selectedCourse: course, isCompleted } = useClass();
   const { navigate } = useNavigation();
 
   const handleNavigateToLessonDetail = useCallback(
@@ -45,8 +45,9 @@ const Lessons: React.FC = () => {
       ...lesson,
       position: index < 9 ? `0${index + 1}` : index + 1,
       duration: secondsToMinutes(lesson.duration),
+      completed: isCompleted(lesson.id),
     }));
-  }, [course.lessons]);
+  }, [course.lessons, isCompleted]);
 
   const selectedClass = useMemo(() => {
     return course;

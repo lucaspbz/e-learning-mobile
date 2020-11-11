@@ -35,7 +35,7 @@ const LessonDetail: React.FC = () => {
   const [lessonIndex, setLessonIndex] = useState(0);
 
   const { params } = useRoute();
-  const { selectedCourse: course } = useClass();
+  const { selectedCourse: course, addCompletedLesson } = useClass();
 
   useEffect(() => {
     const { lessonNumber } = params as IParams;
@@ -50,12 +50,16 @@ const LessonDetail: React.FC = () => {
     };
   }, [course.lessons, lessonIndex]);
 
-  const onStateChange = useCallback(state => {
-    if (state === 'ended') {
-      setPlaying(false);
-      Alert.alert('video has finished playing!');
-    }
-  }, []);
+  const onStateChange = useCallback(
+    state => {
+      if (state === 'ended') {
+        addCompletedLesson(course.lessons[lessonIndex].id);
+        setPlaying(false);
+        Alert.alert('video has finished playing!');
+      }
+    },
+    [addCompletedLesson, course.lessons, lessonIndex],
+  );
 
   useEffect(() => {
     getYoutubeMeta(selectedLesson.video_id).then(meta => {
