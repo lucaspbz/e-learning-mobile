@@ -35,7 +35,7 @@ interface ICourseItemProps {
 }
 
 const CourseItem: React.FC<ICourseItemProps> = ({ course, isDeletable }) => {
-  const { setSelectedCourse } = useClass();
+  const { setSelectedCourse, unsetFavourite } = useClass();
 
   const navigation = useNavigation();
   const handleNavigateToCourse = useCallback(() => {
@@ -46,7 +46,11 @@ const CourseItem: React.FC<ICourseItemProps> = ({ course, isDeletable }) => {
   return (
     <Container onPress={handleNavigateToCourse}>
       {isDeletable && (
-        <DeleteIcon onPress={() => {}}>
+        <DeleteIcon
+          onPress={() => {
+            unsetFavourite(course.id);
+          }}
+        >
           <Feather name="trash" size={20} color="#C4C4D1" />
         </DeleteIcon>
       )}

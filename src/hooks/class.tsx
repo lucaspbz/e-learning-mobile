@@ -19,6 +19,7 @@ interface IClassContextData {
   selectedCourse: ICourse;
   setSelectedCourse(course: ICourse): void;
   setFavourite(course_id: string): void;
+  unsetFavourite(course_id: string): void;
 }
 const ClassContext = createContext<IClassContextData>({} as IClassContextData);
 
@@ -46,6 +47,15 @@ const ClassesProvider: React.FC = ({ children }) => {
     [favouriteCourses],
   );
 
+  const unsetFavourite = useCallback(
+    (course_id: string) => {
+      setFavouriteCourses(
+        favouriteCourses.filter(course => course !== course_id),
+      );
+    },
+    [favouriteCourses],
+  );
+
   return (
     <ClassContext.Provider
       value={{
@@ -54,6 +64,7 @@ const ClassesProvider: React.FC = ({ children }) => {
         data: data.courses,
         favouriteCourses,
         setFavourite,
+        unsetFavourite,
       }}
     >
       {children}
