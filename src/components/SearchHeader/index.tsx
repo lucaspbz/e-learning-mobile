@@ -15,7 +15,11 @@ import {
 import logoImg from '../../assets/e.learning.png';
 import signOutImg from '../../assets/signOut.png';
 
-const SearchHeader: React.FC = () => {
+interface ISearchHeaderProps {
+  onChange(searchParam: string): void;
+}
+
+const SearchHeader: React.FC<ISearchHeaderProps> = ({ onChange }) => {
   const { navigate } = useNavigation();
   return (
     <Container>
@@ -33,7 +37,10 @@ const SearchHeader: React.FC = () => {
 
       <SearchContainer>
         <SearchContainerIcon name="search1" size={20} />
-        <SearchContainerInput placeholder="Busque um curso" />
+        <SearchContainerInput
+          placeholder="Busque um curso"
+          onChangeText={onChange}
+        />
       </SearchContainer>
     </Container>
   );

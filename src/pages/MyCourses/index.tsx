@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import CoursesList from '../../components/CoursesList';
 import SearchHeader from '../../components/SearchHeader';
@@ -9,13 +9,23 @@ import { Container } from './styles';
 const MyCourses: React.FC = () => {
   const { data: allCourses, favouriteCourses } = useClass();
 
+  const [filter, setFilter] = useState('');
+
+  const handleChangeSearchParams = useCallback((searchParam: string) => {
+    setFilter(searchParam);
+  }, []);
+
   const data = useMemo(() => {
-    return allCourses.filter(course => favouriteCourses.includes(course.id));
-  }, [allCourses, favouriteCourses]);
+    return allCourses.filter(
+      course =>
+        favouriteCourses.includes(course.id) &&
+        course.name.toLowerCase().includes(filter),
+    );
+  }, [allCourses, favouriteCourses, filter]);
 
   return (
     <Container>
-      <SearchHeader />
+      <SearchHeader onChange={handleChangeSearchParams} />
 
       <CoursesList
         data={data}
